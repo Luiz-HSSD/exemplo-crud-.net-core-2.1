@@ -13,7 +13,6 @@ namespace WebApplication2
 {
     public class Program
     {
-        static WebApplication2.Models.WebApplication2Context db;
         public static void Main(string[] args)
         {
             

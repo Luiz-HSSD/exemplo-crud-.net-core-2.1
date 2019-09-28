@@ -10,7 +10,8 @@ namespace WebApplication2.Models
         public WebApplication2Context(DbContextOptions<WebApplication2Context> options)
             : base(options)
         {
-
+            //essa linha cria o banco 
+            this.Database.EnsureCreated();
         }
 
         public DbSet<WebApplication2.Models.Fruit> Fruit { get; set; }

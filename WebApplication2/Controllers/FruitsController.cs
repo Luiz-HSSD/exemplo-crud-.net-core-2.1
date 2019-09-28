@@ -16,7 +16,7 @@ namespace WebApplication2.Controllers
         public FruitsController(WebApplication2Context context)
         {
             _context = context;
-            _context.Database.EnsureCreated();
+            
         }
 
         // GET: Fruits
