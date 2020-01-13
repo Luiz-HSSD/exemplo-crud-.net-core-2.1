@@ -4,8 +4,9 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
-using Microsoft.EntityFrameworkCore;
+using System.Data.Entity;
 using WebApplication2.Models;
+using System.Data.Entity.Infrastructure;
 
 namespace WebApplication2.Controllers
 {
@@ -23,7 +24,7 @@ namespace WebApplication2.Controllers
         public async Task<IActionResult> Index()
         {
 
-            return View(await _context.Fruit.ToListAsync());
+            return View(await _context.Fruit.Take(100).ToListAsync());
         }
 
         // GET: Fruits/Details/5
@@ -59,7 +60,7 @@ namespace WebApplication2.Controllers
         {
             if (ModelState.IsValid)
             {
-                _context.Add(fruit);
+                _context.Fruit.Add(fruit);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
@@ -98,7 +99,7 @@ namespace WebApplication2.Controllers
             {
                 try
                 {
-                    _context.Update(fruit);
+                    //_context.Fruit.Update(fruit);
                     await _context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)

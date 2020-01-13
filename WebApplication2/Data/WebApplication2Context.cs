@@ -1,8 +1,10 @@
-﻿using System;
+﻿
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
+
 namespace WebApplication2.Models
 {
     public class WebApplication2Context : DbContext
@@ -11,7 +13,7 @@ namespace WebApplication2.Models
             : base(options)
         {
             //essa linha cria o banco 
-            this.Database.EnsureCreated();
+            //this.Database.;
         }
 
         public DbSet<WebApplication2.Models.Fruit> Fruit { get; set; }
