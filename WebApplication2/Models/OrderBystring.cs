@@ -13,7 +13,7 @@ namespace WebApplication2.Models
        this IQueryable<TSource> query, string propertyName)
         {
             var entityType = typeof(TSource);
-
+            propertyName = propertyName.ToLower();
             //Create x=>x.PropName
             var propertyInfo = entityType.GetProperty(propertyName);
             ParameterExpression arg = Expression.Parameter(entityType, "x");

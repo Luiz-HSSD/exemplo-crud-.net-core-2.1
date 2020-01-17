@@ -21,10 +21,10 @@ namespace WebApplication2.Controllers
         }
 
         // GET: Fruits
-        public async Task<IActionResult> Index()
+        public  IActionResult Index()
         {
-
-            return View(await _context.Fruit.Take(100).ToListAsync());
+            //_context.Fruit.ToList()
+            return View( );
         }
 
         // GET: Fruits/Details/5

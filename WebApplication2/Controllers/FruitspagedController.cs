@@ -24,8 +24,9 @@ namespace WebApplication2.Controllers
         }
 
         // GET: api/Fruitspaged
-        [HttpGet]
-        public dynamic GetFruit(DataTableAjaxPostModel model)
+        [HttpPost]
+        [Consumes("application/x-www-form-urlencoded")]
+        public dynamic GetFruit([FromForm]DataTableAjaxPostModel model)
         {
             // action inside a standard controller
             int filteredResultsCount;
@@ -116,7 +117,7 @@ namespace WebApplication2.Controllers
 
             return NoContent();
         }
-
+        /*
         // POST: api/Fruitspaged
         [HttpPost]
         public async Task<IActionResult> PostFruit([FromBody] Fruit fruit)
@@ -131,7 +132,8 @@ namespace WebApplication2.Controllers
 
             return CreatedAtAction("GetFruit", new { id = fruit.id }, fruit);
         }
-
+        */
+    
         // DELETE: api/Fruitspaged/5
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteFruit([FromRoute] int id)

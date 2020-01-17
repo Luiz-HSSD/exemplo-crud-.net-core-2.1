@@ -44,7 +44,7 @@ namespace WebApplication2.Models
             if (String.IsNullOrEmpty(searchBy))
             {
                 // if we have an empty search then just order the results by Id ascending
-                sortBy = "Id";
+                sortBy = "id";
                 sortDir = true;
             }
 
@@ -79,8 +79,8 @@ namespace WebApplication2.Models
                 // as we only have 2 cols allow the user type in name 'firstname lastname' then use the list to search the first and last name of dbase
                 var searchTerms = searchValue.Split(' ').ToList().ConvertAll(x => x.ToLower());
 
-                predicate = predicate.Or(s => searchTerms.Any(srch => s.id.ToString().ToLower().Contains(srch)));
-                predicate = predicate.Or(s => searchTerms.Any(srch => s.Nome.ToLower().Contains(srch)));
+                // predicate = predicate.Or(s => searchTerms.Any(srch => s.id.ToString().ToLower().Contains(srch)));
+                predicate = predicate.Or(s => s.Nome.ToLower().Contains(searchValue));//searchValue.Any(srch => s.Nome.ToLower().Contains(srch)));
             }
             return predicate;
         }
