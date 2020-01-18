@@ -14,6 +14,7 @@
 <table id="tb_view" class="table">
     <thead>
         <tr>
+            <th>id</th>
             <th>
                 Nome
             </th>
@@ -24,12 +25,18 @@
     </tbody>
 </table>
 <script type="text/javascript">
+    $.fn.dataTable.ext.errMode = 'throw';
     $(document).ready(function () {
+
         $.fn.dataTable.ext.errMode = 'throw';
+        var add_action = true;
+        var add_checkbox = true;
         $('#tb_view').DataTable(
             {
-                "proccessing": true,
+                "processing": true,
                 "serverSide": true,
+                "responsive": true,
+                "pagingType": "full_numbers",
                 "ajax": {
                     url: "/api/Fruitspaged",
                     type: 'POST'
@@ -38,10 +45,27 @@
                     "search": "",
                     "searchPlaceholder": "Search..."
                 },
+                
                 "columns": [
                     { "data": "id" },
-                    { "data": "nome" }
-                ]
+                    { "data": "nome" },
+                    {
+                        "mRender": function (data, type, row) {
+                            return '<a class="btn btn-danger" onclick="window.location.href=window.location.href+\'/Delete?id=' + row.id +'\'">' +
+                                '<span class="glyphicon glyphicon-trash"> </span>' +
+                                '</a>'
+                                +
+                                '<a class="btn btn-primary" onclick="window.location.href=window.location.href+\'/Edit?id=' + row.id +'\'">' +
+                                '<span class="glyphicon glyphicon-pencil"> </span>' +
+                                '</a>'
+                                +
+                                '<a class="btn btn-primary" onclick="window.location.href=window.location.href+\'/Details?id=' + row.id +'\'">' +
+                                '<span class="glyphicon glyphicon-eye-open"> </span>' +
+                                '</a>'
+                        }
+                    }
+                ],
+                
             });
     });
 </script>

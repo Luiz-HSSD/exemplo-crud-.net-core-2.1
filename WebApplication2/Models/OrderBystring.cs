@@ -9,13 +9,51 @@ namespace WebApplication2.Models
 {
     public static class OrderBystring
     {
+
+        public static IOrderedQueryable<TSource> OrderByAD<TSource>(
+       this IQueryable<TSource> query, string propertyName,bool order)
+        {
+            return order ? query.OrderBy(propertyName): query.OrderByDescending(propertyName);
+        }
+            public static IOrderedQueryable<TSource> OrderByDescending<TSource>(
+       this IQueryable<TSource> query, string propertyName)
+        {
+            var entityType = typeof(TSource);
+            propertyName = propertyName.ToLower();
+            //Create x=>x.PropName
+            var propertyInfo = entityType.GetProperty(propertyName, BindingFlags.IgnoreCase | BindingFlags.Public | BindingFlags.Instance);
+            ParameterExpression arg = Expression.Parameter(entityType, "x");
+            MemberExpression property = Expression.Property(arg, propertyName);
+            var selector = Expression.Lambda(property, new ParameterExpression[] { arg });
+
+            //Get System.Linq.Queryable.OrderBy() method.
+            var enumarableType = typeof(System.Linq.Queryable);
+            var method = enumarableType.GetMethods()
+                 .Where(m => m.Name == "OrderByDescending" && m.IsGenericMethodDefinition)
+                 .Where(m =>
+                 {
+                     var parameters = m.GetParameters().ToList();
+             //Put more restriction here to ensure selecting the right overload                
+             return parameters.Count == 2;//overload that has 2 parameters
+         }).Single();
+            //The linq's OrderBy<TSource, TKey> has two generic types, which provided here
+            MethodInfo genericMethod = method
+                 .MakeGenericMethod(entityType, propertyInfo.PropertyType);
+
+            /*Call query.OrderBy(selector), with query and selector: x=> x.PropName
+              Note that we pass the selector as Expression to the method and we don't compile it.
+              By doing so EF can extract "order by" columns and generate SQL for it.*/
+            var newQuery = (IOrderedQueryable<TSource>)genericMethod
+                 .Invoke(genericMethod, new object[] { query, selector });
+            return newQuery;
+        }
         public static IOrderedQueryable<TSource> OrderBy<TSource>(
        this IQueryable<TSource> query, string propertyName)
         {
             var entityType = typeof(TSource);
             propertyName = propertyName.ToLower();
             //Create x=>x.PropName
-            var propertyInfo = entityType.GetProperty(propertyName);
+            var propertyInfo = entityType.GetProperty(propertyName, BindingFlags.IgnoreCase | BindingFlags.Public | BindingFlags.Instance);
             ParameterExpression arg = Expression.Parameter(entityType, "x");
             MemberExpression property = Expression.Property(arg, propertyName);
             var selector = Expression.Lambda(property, new ParameterExpression[] { arg });
@@ -27,9 +65,9 @@ namespace WebApplication2.Models
                  .Where(m =>
                  {
                      var parameters = m.GetParameters().ToList();
-             //Put more restriction here to ensure selecting the right overload                
-             return parameters.Count == 2;//overload that has 2 parameters
-         }).Single();
+                     //Put more restriction here to ensure selecting the right overload                
+                     return parameters.Count == 2;//overload that has 2 parameters
+                 }).Single();
             //The linq's OrderBy<TSource, TKey> has two generic types, which provided here
             MethodInfo genericMethod = method
                  .MakeGenericMethod(entityType, propertyInfo.PropertyType);

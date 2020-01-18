@@ -35,8 +35,8 @@ namespace WebApplication2.Controllers
                 return NotFound();
             }
 
-            var fruit = await _context.Fruit
-                .FirstOrDefaultAsync(m => m.id == id);
+            var fruit =  _context.Fruit
+                .FirstOrDefault(m => m.id == id);
             if (fruit == null)
             {
                 return NotFound();
@@ -61,7 +61,7 @@ namespace WebApplication2.Controllers
             if (ModelState.IsValid)
             {
                 _context.Fruit.Add(fruit);
-                await _context.SaveChangesAsync();
+                _context.SaveChanges();
                 return RedirectToAction(nameof(Index));
             }
             return View(fruit);
@@ -75,7 +75,7 @@ namespace WebApplication2.Controllers
                 return NotFound();
             }
 
-            var fruit = await _context.Fruit.FindAsync(id);
+            var fruit =  _context.Fruit.Find(id);
             if (fruit == null)
             {
                 return NotFound();
@@ -99,8 +99,8 @@ namespace WebApplication2.Controllers
             {
                 try
                 {
-                    //_context.Fruit.Update(fruit);
-                    await _context.SaveChangesAsync();
+                     _context.Fruit.Update(fruit);
+                     _context.SaveChanges();
                 }
                 catch (DbUpdateConcurrencyException)
                 {
@@ -126,8 +126,8 @@ namespace WebApplication2.Controllers
                 return NotFound();
             }
 
-            var fruit = await _context.Fruit
-                .FirstOrDefaultAsync(m => m.id == id);
+            var fruit =  _context.Fruit
+                .FirstOrDefault(m => m.id == id);
             if (fruit == null)
             {
                 return NotFound();
@@ -141,9 +141,9 @@ namespace WebApplication2.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var fruit = await _context.Fruit.FindAsync(id);
+            var fruit =  _context.Fruit.Find(id);
             _context.Fruit.Remove(fruit);
-            await _context.SaveChangesAsync();
+             _context.SaveChanges();
             return RedirectToAction(nameof(Index));
         }
 
